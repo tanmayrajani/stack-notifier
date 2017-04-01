@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>stack unread notifier</title>
+</head>
+<body>
+	<h6>Hi, thanks for using this app!</h6>
+</body>
+<script type="text/javascript">
+	function getParameterByName(name, url) {
+	    if (!url) {
+	      url = window.location.href;
+	    }
+	    name = name.replace(/[\[\]]/g, "\\$&");
+	    var regex = new RegExp("[?#&]" + name + "(=([^&#]*)|&|#|$)"),
+	        results = regex.exec(url);
+	    if (!results) return null;
+	    if (!results[2]) return '';
+	    return decodeURIComponent(results[2].replace(/\+/g, " "));
+	}
+	window.localStorage.setItem("accessToken", getParameterByName("access_token"))
+	window.close()
+</script>
+</html>
