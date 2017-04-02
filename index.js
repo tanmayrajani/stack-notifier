@@ -43,7 +43,7 @@ function addUserToDB(accessToken) {
 
 function getUnreadInbox(user) {
     request.get({
-        uri: 'https://api.stackexchange.com/2.2/me/inbox/unread?key=0BeQ3OPnU)LJUqXsy97D*g((&page=1&pagesize=12&access_token=' + user.accessToken,
+        uri: 'https://api.stackexchange.com/2.2/me/inbox/unread?site=stackoverflow&key=0BeQ3OPnU)LJUqXsy97D*g((&page=1&pagesize=12&access_token=' + user.accessToken,
         gzip: true
     }, function (error, response, body) {
         if (error) {
@@ -53,7 +53,14 @@ function getUnreadInbox(user) {
             let jsonbody = JSON.parse(body);
             if (jsonbody["items"] && jsonbody["items"].length > 0) {
                 jsonbody["items"].forEach(function (item) {
-                    bot.say(user.userId, item);
+                    bot.say(user.userId, {
+                        text: 'You got a reply in ' + item["item_type"] + '\n\n"' + item["title"] + '"',
+                        buttons: [{
+                            type: 'web_url',
+                            title: 'Visit post',
+                            url: item["link"]
+                        }]
+                    });
                 })
             }
         }
@@ -74,7 +81,7 @@ function getUnreadReputationChanges(user) {
             if (jsonbody["items"] && jsonbody["items"].length > 0) {
                 jsonbody["items"].forEach(function (item) {
                     console.log(item["vote_type"] + " " + item["reputation_change"] + " " + item["on_date"] * 1000);
-                    if (item["on_date"] * 1000 > (new Date().getTime() - 600000)) {
+                    if (item["on_date"] * 1000 > (new Date().getTime() - 350000)) {
                         bot.say(user.userId, {
                             text: "+" + item["reputation_change"] + ", " + item["vote_type"].replace(/_/g, " "),
                             buttons: [{
