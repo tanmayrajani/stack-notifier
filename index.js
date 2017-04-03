@@ -53,14 +53,16 @@ function getUnreadInbox(user) {
             let jsonbody = JSON.parse(body);
             if (jsonbody["items"] && jsonbody["items"].length > 0) {
                 jsonbody["items"].forEach(function (item) {
-                    bot.say(user.userId, {
-                        text: 'You got a reply in ' + item["item_type"] + '\n\n"' + item["title"] + '"',
-                        buttons: [{
-                            type: 'web_url',
-                            title: 'Visit post',
-                            url: item["link"]
-                        }]
-                    });
+                    if (item["creation_date"] * 1000 > (new Date().getTime() - 305000)) {
+                        bot.say(user.userId, {
+                            text: 'You got a reply in ' + item["item_type"] + '\n\n"' + item["title"] + '"',
+                            buttons: [{
+                                type: 'web_url',
+                                title: 'Visit post',
+                                url: item["link"]
+                            }]
+                        });
+                    }
                 })
             }
         }
@@ -68,7 +70,6 @@ function getUnreadInbox(user) {
 }
 
 function getUnreadReputationChanges(user) {
-    console.log("WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW")
     request.get({
         uri: 'https://api.stackexchange.com/2.2/me/reputation?site=stackoverflow&key=0BeQ3OPnU)LJUqXsy97D*g((&access_token=' + user.accessToken,
         gzip: true
@@ -80,8 +81,7 @@ function getUnreadReputationChanges(user) {
             let jsonbody = JSON.parse(body);
             if (jsonbody["items"] && jsonbody["items"].length > 0) {
                 jsonbody["items"].forEach(function (item) {
-                    console.log(item["vote_type"] + " " + item["reputation_change"] + " " + item["on_date"] * 1000);
-                    if (item["on_date"] * 1000 > (new Date().getTime() - 350000)) {
+                    if (item["on_date"] * 1000 > (new Date().getTime() - 305000)) {
                         bot.say(user.userId, {
                             text: "+" + item["reputation_change"] + ", " + item["vote_type"].replace(/_/g, " "),
                             buttons: [{
