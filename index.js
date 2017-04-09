@@ -53,7 +53,7 @@ function getUnreadInbox(user) {
             let jsonbody = JSON.parse(body);
             if (jsonbody["items"] && jsonbody["items"].length > 0) {
                 jsonbody["items"].forEach(function (item) {
-                    if (item["creation_date"] * 1000 > (new Date().getTime() - 305000)) {
+                    if (item["creation_date"] * 1000 > (new Date().getTime() - 300800)) {
                         bot.say(user.userId, {
                             text: 'You got a reply in ' + item["item_type"] + '\n\n"' + item["title"] + '"',
                             buttons: [{
